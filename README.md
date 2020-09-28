@@ -1,4 +1,4 @@
-<a href="https://cafereactapi.herokuapp.com/" ><h1> React Cafe </h1></a>
+<a href="https://cafereactapi.herokuapp.com/" ><h1> React Cafe API </h1></a>
 
 This API uses Express, Mongoose and JWT.
 
