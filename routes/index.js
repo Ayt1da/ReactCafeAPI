@@ -107,7 +107,14 @@ router.post("/follow", auth, (req, res) => {
         };
         user.following.push(follow);
         user.save();
-        res.send("Successfully followed User");
+        User.findById(req.body.followId, (err, user) => {
+          let follow = {
+            id: req.body.userId,
+          };
+          user.followers.push(follow);
+          user.save();
+          res.send("Successfully followed User");
+        });
       } else {
         user.following = user.following.filter((follow) => {
           if (follow.id != req.body.followId) {
@@ -115,7 +122,15 @@ router.post("/follow", auth, (req, res) => {
           }
         });
         user.save();
-        res.send("UnFollowed");
+        User.findById(req.body.followId, (err, user) => {
+          user.followers = user.followers.filter((follow) => {
+            if (follow.id != req.body.userId) {
+              return follow;
+            }
+          });
+          user.save();
+          res.send("UnFollowed");
+        });
       }
     }
   });
