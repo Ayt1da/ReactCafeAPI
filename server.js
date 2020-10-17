@@ -1,6 +1,7 @@
 const bodyParser = require("body-parser"),
-  mongoose = require("mongoose"),
   config = require("./config/default.json"),
+  rateLimit = require("express-rate-limit"),
+  mongoose = require("mongoose"),
   express = require("express"),
   cors = require("cors"),
   app = express();
@@ -10,6 +11,11 @@ const commentRoutes = require("./routes/comments"),
   indexRoutes = require("./routes/index"),
   cafeRoutes = require("./routes/cafe");
 
+const limiter = rateLimit({
+  windowMs: 2 * 60 * 1000,
+  max: 200,
+});
+
 mongoose.connect(config["uri"], {
   useNewUrlParser: true,
   useUnifiedTopology: true,
@@ -17,6 +23,7 @@ mongoose.connect(config["uri"], {
 });
 
 app.use(cors());
+app.use(limiter);
 app.use(bodyParser.json());
 
 app.use("/cafe/:id/comments", commentRoutes);
